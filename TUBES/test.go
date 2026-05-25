@@ -51,7 +51,8 @@ var nUser, nPasien, nLayanan, nTransaksi, nKunjungan int
 func banner() {
 	fmt.Println("*****************************************************")
 	fmt.Println("***      Aplikasi Manajemen Klinik (SIM-KLIK)      ***")
-	fmt.Println("***          Algoritma Pemrograman  2025           ***")
+	fmt.Println("***         Created by Nama Lu                     ***")
+	fmt.Println("***         Algoritma Pemrograman 2025             ***")
 	fmt.Println("*****************************************************")
 }
 
@@ -65,6 +66,8 @@ func menuUtama() {
 
 func registrasi() {
 	var pilih int
+	var temp User
+	var konfirmasi string
 
 	if nUser >= NMAX {
 		fmt.Println("Data user penuh")
@@ -73,10 +76,10 @@ func registrasi() {
 
 	fmt.Println("\n*** REGISTRASI ***")
 	fmt.Print("Username : ")
-	fmt.Scan(&dataUser[nUser].Username)
+	fmt.Scan(&temp.Username)
 
 	fmt.Print("Password : ")
-	fmt.Scan(&dataUser[nUser].Password)
+	fmt.Scan(&temp.Password)
 
 	fmt.Println("Pilih Role :")
 	fmt.Println("1. Admin")
@@ -85,16 +88,32 @@ func registrasi() {
 	fmt.Scan(&pilih)
 
 	if pilih == 1 {
-		dataUser[nUser].Role = "admin"
+		temp.Role = "admin"
 	} else if pilih == 2 {
-		dataUser[nUser].Role = "kasir"
+		temp.Role = "kasir"
 	} else {
 		fmt.Println("Role tidak valid")
 		return
 	}
 
-	nUser++
-	fmt.Println("Registrasi berhasil")
+	fmt.Println("\nData Registrasi:")
+	fmt.Println("Username :", temp.Username)
+	fmt.Println("Role     :", temp.Role)
+
+	fmt.Print("Apakah data sudah sesuai? (y/n) : ")
+	fmt.Scan(&konfirmasi)
+
+	if konfirmasi == "y" || konfirmasi == "Y" {
+		dataUser[nUser] = temp
+		nUser++
+		fmt.Println("\n----------------------------")
+		fmt.Println("---- Registrasi berhasil----")
+		fmt.Println("----------------------------\n")
+	} else {
+		fmt.Println("\n-------------------------------")
+		fmt.Println("---- Registrasi dibatalkan ----")
+		fmt.Println("-------------------------------\n")
+	}
 }
 
 func login() string {
@@ -112,12 +131,16 @@ func login() string {
 			return dataUser[i].Role
 		}
 	}
-
-	fmt.Println("Login gagal")
+	fmt.Println("\n---------------------")
+	fmt.Println("---- Login gagal ----")
+	fmt.Println("---------------------\n")
 	return ""
 }
 
 func tambahPasien() {
+	var temp Pasien
+	var konfirmasi string
+
 	if nPasien >= NMAX {
 		fmt.Println("Data penuh")
 		return
@@ -125,16 +148,30 @@ func tambahPasien() {
 
 	fmt.Println("\n*** TAMBAH PASIEN ***")
 	fmt.Print("ID Pasien : ")
-	fmt.Scan(&dataPasien[nPasien].ID)
+	fmt.Scan(&temp.ID)
 	fmt.Print("Nama : ")
-	fmt.Scan(&dataPasien[nPasien].Nama)
+	fmt.Scan(&temp.Nama)
 	fmt.Print("Alamat : ")
-	fmt.Scan(&dataPasien[nPasien].Alamat)
+	fmt.Scan(&temp.Alamat)
 	fmt.Print("No HP : ")
-	fmt.Scan(&dataPasien[nPasien].NoHP)
+	fmt.Scan(&temp.NoHP)
 
-	nPasien++
-	fmt.Println("Pasien berhasil ditambahkan")
+	fmt.Println("\nData yang diinput:")
+	fmt.Println("ID     :", temp.ID)
+	fmt.Println("Nama   :", temp.Nama)
+	fmt.Println("Alamat :", temp.Alamat)
+	fmt.Println("No HP  :", temp.NoHP)
+
+	fmt.Print("Apakah data sudah sesuai? (y/n) : ")
+	fmt.Scan(&konfirmasi)
+
+	if konfirmasi == "y" || konfirmasi == "Y" {
+		dataPasien[nPasien] = temp
+		nPasien++
+		fmt.Println("Pasien berhasil ditambahkan")
+	} else {
+		fmt.Println("Input dibatalkan")
+	}
 }
 
 func tampilPasien() {
@@ -157,20 +194,38 @@ func tampilPasien() {
 
 func ubahPasien() {
 	var id int
+	var konfirmasi string
+	var temp Pasien
 
 	fmt.Print("Masukkan ID Pasien : ")
 	fmt.Scan(&id)
 
 	for i := 0; i < nPasien; i++ {
 		if dataPasien[i].ID == id {
-			fmt.Print("Nama Baru : ")
-			fmt.Scan(&dataPasien[i].Nama)
-			fmt.Print("Alamat Baru : ")
-			fmt.Scan(&dataPasien[i].Alamat)
-			fmt.Print("No HP Baru : ")
-			fmt.Scan(&dataPasien[i].NoHP)
+			temp = dataPasien[i]
 
-			fmt.Println("Data berhasil diubah")
+			fmt.Print("Nama Baru : ")
+			fmt.Scan(&temp.Nama)
+			fmt.Print("Alamat Baru : ")
+			fmt.Scan(&temp.Alamat)
+			fmt.Print("No HP Baru : ")
+			fmt.Scan(&temp.NoHP)
+
+			fmt.Println("\nData baru:")
+			fmt.Println("ID     :", temp.ID)
+			fmt.Println("Nama   :", temp.Nama)
+			fmt.Println("Alamat :", temp.Alamat)
+			fmt.Println("No HP  :", temp.NoHP)
+
+			fmt.Print("Apakah data sudah sesuai? (y/n) : ")
+			fmt.Scan(&konfirmasi)
+
+			if konfirmasi == "y" || konfirmasi == "Y" {
+				dataPasien[i] = temp
+				fmt.Println("Data berhasil diubah")
+			} else {
+				fmt.Println("Update dibatalkan")
+			}
 			return
 		}
 	}
@@ -179,17 +234,28 @@ func ubahPasien() {
 
 func hapusPasien() {
 	var id int
+	var konfirmasi string
 
 	fmt.Print("Masukkan ID Pasien : ")
 	fmt.Scan(&id)
 
 	for i := 0; i < nPasien; i++ {
 		if dataPasien[i].ID == id {
-			for j := i; j < nPasien-1; j++ {
-				dataPasien[j] = dataPasien[j+1]
+			fmt.Println("Data ditemukan:")
+			fmt.Println(dataPasien[i])
+
+			fmt.Print("Yakin hapus data? (y/n) : ")
+			fmt.Scan(&konfirmasi)
+
+			if konfirmasi == "y" || konfirmasi == "Y" {
+				for j := i; j < nPasien-1; j++ {
+					dataPasien[j] = dataPasien[j+1]
+				}
+				nPasien--
+				fmt.Println("Data berhasil dihapus")
+			} else {
+				fmt.Println("Hapus dibatalkan")
 			}
-			nPasien--
-			fmt.Println("Data berhasil dihapus")
 			return
 		}
 	}
@@ -197,6 +263,9 @@ func hapusPasien() {
 }
 
 func tambahLayanan() {
+	var temp Layanan
+	var konfirmasi string
+
 	if nLayanan >= NMAX {
 		fmt.Println("Data penuh")
 		return
@@ -204,14 +273,27 @@ func tambahLayanan() {
 
 	fmt.Println("\n*** TAMBAH LAYANAN ***")
 	fmt.Print("ID Layanan : ")
-	fmt.Scan(&dataLayanan[nLayanan].ID)
+	fmt.Scan(&temp.ID)
 	fmt.Print("Nama Layanan : ")
-	fmt.Scan(&dataLayanan[nLayanan].Nama)
+	fmt.Scan(&temp.Nama)
 	fmt.Print("Harga : ")
-	fmt.Scan(&dataLayanan[nLayanan].Harga)
+	fmt.Scan(&temp.Harga)
 
-	nLayanan++
-	fmt.Println("Layanan berhasil ditambahkan")
+	fmt.Println("\nData yang diinput:")
+	fmt.Println("ID    :", temp.ID)
+	fmt.Println("Nama  :", temp.Nama)
+	fmt.Println("Harga :", temp.Harga)
+
+	fmt.Print("Apakah data sudah sesuai? (y/n) : ")
+	fmt.Scan(&konfirmasi)
+
+	if konfirmasi == "y" || konfirmasi == "Y" {
+		dataLayanan[nLayanan] = temp
+		nLayanan++
+		fmt.Println("Layanan berhasil ditambahkan")
+	} else {
+		fmt.Println("Input dibatalkan")
+	}
 }
 
 func tampilLayanan() {
@@ -233,18 +315,35 @@ func tampilLayanan() {
 
 func ubahLayanan() {
 	var id int
+	var konfirmasi string
+	var temp Layanan
 
 	fmt.Print("Masukkan ID Layanan : ")
 	fmt.Scan(&id)
 
 	for i := 0; i < nLayanan; i++ {
 		if dataLayanan[i].ID == id {
-			fmt.Print("Nama Baru : ")
-			fmt.Scan(&dataLayanan[i].Nama)
-			fmt.Print("Harga Baru : ")
-			fmt.Scan(&dataLayanan[i].Harga)
+			temp = dataLayanan[i]
 
-			fmt.Println("Layanan berhasil diubah")
+			fmt.Print("Nama Baru : ")
+			fmt.Scan(&temp.Nama)
+			fmt.Print("Harga Baru : ")
+			fmt.Scan(&temp.Harga)
+
+			fmt.Println("\nData baru:")
+			fmt.Println("ID    :", temp.ID)
+			fmt.Println("Nama  :", temp.Nama)
+			fmt.Println("Harga :", temp.Harga)
+
+			fmt.Print("Apakah data sudah sesuai? (y/n) : ")
+			fmt.Scan(&konfirmasi)
+
+			if konfirmasi == "y" || konfirmasi == "Y" {
+				dataLayanan[i] = temp
+				fmt.Println("Layanan berhasil diubah")
+			} else {
+				fmt.Println("Update dibatalkan")
+			}
 			return
 		}
 	}
@@ -253,17 +352,28 @@ func ubahLayanan() {
 
 func hapusLayanan() {
 	var id int
+	var konfirmasi string
 
 	fmt.Print("Masukkan ID Layanan : ")
 	fmt.Scan(&id)
 
 	for i := 0; i < nLayanan; i++ {
 		if dataLayanan[i].ID == id {
-			for j := i; j < nLayanan-1; j++ {
-				dataLayanan[j] = dataLayanan[j+1]
+			fmt.Println("Data ditemukan:")
+			fmt.Println(dataLayanan[i])
+
+			fmt.Print("Yakin hapus data? (y/n) : ")
+			fmt.Scan(&konfirmasi)
+
+			if konfirmasi == "y" || konfirmasi == "Y" {
+				for j := i; j < nLayanan-1; j++ {
+					dataLayanan[j] = dataLayanan[j+1]
+				}
+				nLayanan--
+				fmt.Println("Layanan berhasil dihapus")
+			} else {
+				fmt.Println("Hapus dibatalkan")
 			}
-			nLayanan--
-			fmt.Println("Layanan berhasil dihapus")
 			return
 		}
 	}
@@ -361,6 +471,9 @@ func binarySearchID(id int) {
 }
 
 func tambahTransaksi() {
+	var temp Transaksi
+	var konfirmasi string
+
 	if nTransaksi >= NMAX {
 		fmt.Println("Data penuh")
 		return
@@ -368,25 +481,41 @@ func tambahTransaksi() {
 
 	fmt.Println("\n*** TAMBAH TRANSAKSI ***")
 	fmt.Print("ID Pasien : ")
-	fmt.Scan(&dataTransaksi[nTransaksi].IDPasien)
+	fmt.Scan(&temp.IDPasien)
 	fmt.Print("Nama Pasien : ")
-	fmt.Scan(&dataTransaksi[nTransaksi].NamaPasien)
+	fmt.Scan(&temp.NamaPasien)
 	fmt.Print("Layanan : ")
-	fmt.Scan(&dataTransaksi[nTransaksi].Layanan)
+	fmt.Scan(&temp.Layanan)
 	fmt.Print("Tanggal (angka) : ")
-	fmt.Scan(&dataTransaksi[nTransaksi].Tanggal)
+	fmt.Scan(&temp.Tanggal)
 	fmt.Print("Total Biaya : ")
-	fmt.Scan(&dataTransaksi[nTransaksi].TotalBiaya)
+	fmt.Scan(&temp.TotalBiaya)
 
-	dataKunjungan[nKunjungan].IDPasien = dataTransaksi[nTransaksi].IDPasien
-	dataKunjungan[nKunjungan].NamaPasien = dataTransaksi[nTransaksi].NamaPasien
-	dataKunjungan[nKunjungan].Layanan = dataTransaksi[nTransaksi].Layanan
-	dataKunjungan[nKunjungan].Tanggal = dataTransaksi[nTransaksi].Tanggal
+	fmt.Println("\nData yang diinput:")
+	fmt.Println("ID Pasien   :", temp.IDPasien)
+	fmt.Println("Nama Pasien :", temp.NamaPasien)
+	fmt.Println("Layanan     :", temp.Layanan)
+	fmt.Println("Tanggal     :", temp.Tanggal)
+	fmt.Println("Total Biaya :", temp.TotalBiaya)
 
-	nTransaksi++
-	nKunjungan++
+	fmt.Print("Apakah data sudah sesuai? (y/n) : ")
+	fmt.Scan(&konfirmasi)
 
-	fmt.Println("Transaksi berhasil ditambahkan")
+	if konfirmasi == "y" || konfirmasi == "Y" {
+		dataTransaksi[nTransaksi] = temp
+
+		dataKunjungan[nKunjungan].IDPasien = temp.IDPasien
+		dataKunjungan[nKunjungan].NamaPasien = temp.NamaPasien
+		dataKunjungan[nKunjungan].Layanan = temp.Layanan
+		dataKunjungan[nKunjungan].Tanggal = temp.Tanggal
+
+		nTransaksi++
+		nKunjungan++
+
+		fmt.Println("Transaksi berhasil ditambahkan")
+	} else {
+		fmt.Println("Input dibatalkan")
+	}
 }
 
 func tampilTransaksi() {
